@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>وبلاگ من</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>وبلاگ من</h1>
+      <p>درمورد شیر مرغ تا جون ادمیزاد ما پست داریم اینجا</p>
+    </div>
+
+    <div class="container">
+      <!-- فلش مسیج ها -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+          <!-- نو بار برای کتگوری -->
+      {% if categories %}
+        <nav class="navbar">
+          <ul>
+            <li><a href="{{ url_for('index') }}" {% if not selected_category %}class="active"{% endif %}>همه</a></li>
+            {% for cat in categories %}
+              <li><a href="{{ url_for('index', category=cat[0]) }}" {% if selected_category == cat[0] %}class="active"{% endif %}>{{ cat[0] }}</a></li>
+            {% endfor %}
+          </ul>
+        </nav>
+      {% endif %}
+
+      <!-- پست ها -->
+      <div class="posts">
+        {% for post in posts %}
+          <div class="post">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+            <div class="post-meta">
+              <span>📅 {{ post.date_posted.strftime('%Y-%m-%d') }}</span>
+              <span>🏷️ {{ post.category }}</span>
+            </div>
+          </div>
+        {% else %}
+          <div class="no-posts">
+            {% if selected_category %}
+              <h3>هیچ پستی در دسته‌بندی "{{ selected_category }}" یافت نشد!</h3>
+              <p><a href="{{ url_for('index') }}">مشاهده همه پست ها</a></p>
+            {% else %}
+              <h3>هنوز پستی منتشر نشده!</h3>
+              <p>به زودی پست های جذابی منتشر میشه منتظر باش.</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- لینک مدیریت -->
+      <a href="{{ url_for('login') }}" class="admin-link">ورود به بخش مدیریت</a>
+    </div>
+  </body>
+</html>

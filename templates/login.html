@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ورود به سیستم</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='login.css') }}"
+    />
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>ورود به پنل مدیریت</h2>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="flash-message flash-{{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <form method="POST">
+        <div class="form-group">
+          <label for="username">نام کاربری:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">رمز عبور:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <button type="submit" class="btn">ورود به سیستم</button>
+      </form>
+
+      <div class="demo-accounts">
+        <strong>اطلاعات ورود آزمایشی:</strong>
+        <div>نام کاربری: admin - رمز: admin123</div>
+      </div>
+
+      <a href="{{ url_for('index') }}" class="back-link">بازگشت به صفحه اصلی</a>
+    </div>
+  </body>
+</html>

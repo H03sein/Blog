@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پنل مدیریت</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>پنل مدیریت وبلاگ</h1>
+      <p>کاربر: {{ session.username }} - خوش آمدید</p>
+    </div>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash-message flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <div class="admin-panel">
+        <div class="add-post-form">
+          <h3>ایجاد پست جدید</h3>
+          <form action="{{ url_for('add_post') }}" method="POST">
+            <div class="form-group">
+              <label for="title">عنوان پست:</label>
+              <input type="text" id="title" name="title" required />
+            </div>
+
+            <div class="form-group">
+              <label for="content">محتوای اصلی:</label>
+              <textarea id="content" name="content" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="category">دسته‌بندی:</label>
+              <input type="text" id="category" name="category" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">پست شود</button>
+          </form>
+        </div>
+
+        <div class="posts-list">
+          <h3>پست منتشر شده ({{ posts|length }})</h3>
+
+          {% for post in posts %}
+            <div class="post-item">
+              <h4>{{ post.title }}</h4>
+              <p><strong>دسته‌بندی:</strong> {{ post.category }}</p>
+              <p>
+                <strong>تاریخ انتشار:</strong> {{ post.date_posted.strftime('%Y-%m-%d - %H:%M') }}
+              </p>
+              <div class="post-actions">
+                <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger" onclick="return confirm('آیا از حذف این مطلب اطمینان دارید؟')">
+                  حذف پست
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <p>هنوز پستی منتشر نکرده‌اید</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="{{ url_for('index') }}">مشاهده وبلاگ</a>
+        <a href="{{ url_for('logout') }}">خروج از سیستم</a>
+      </div>
+    </div>
+  </body>
+</html>
