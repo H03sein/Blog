@@ -22,10 +22,10 @@ USERS = {
 
 with app.app_context():
     try:
-        db.create_all()  # سعی کن جدول‌ها رو بساز
+        db.create_all() 
         db.session.commit()
     except Exception as e:
-        print(f"خطا در اتصال به دیتابیس: {e}")  # خطای ساده برای دیباگ
+        print(f"خطا در اتصال به دیتابیس: {e}") 
 
 @app.route('/')
 def index():
